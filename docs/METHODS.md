@@ -168,3 +168,29 @@ No structure, no docking, no folding, no learned model, and no wet-lab data. The
 prioritised, chemically annotated hypothesis list with its null distributions attached. Every
 composite is a desirability aggregate over heuristics, and none of the five mechanisms has
 been demonstrated for any sequence here.
+
+## 8. Prior work the order-sensitivity claim has to be read against
+
+**Wallach & Heifets, *J Chem Inf Model* 2017 — "Most Ligand-Based Benchmarks Measure
+Overfitting Rather than Accuracy."** Defines AVE bias, a computable measure of
+training–validation redundancy, and shows its magnitude strongly correlates with the measured
+performance of ligand-based methods across seven benchmarks. This is the precedent for the
+*form* of the order-sensitive-weight claim: a quantity computed about the setup, before the
+result, that predicts how much of the result will be artifact. The order weight is that idea
+applied to an objective function instead of a dataset split — computable with no data at all,
+since it follows from which terms are permutation-invariant — and it is not a new kind of
+argument.
+
+**Guo et al. 2024/2025 — scaffold splits overestimate virtual screening performance**, with
+UMAP-clustering splits harder than Butina, harder than scaffold, barely harder than random.
+**Fooladi et al. 2025** finds classical models and GNNs not substantially different under
+Bemis–Murcko scaffold splits, and that ID/OOD correlation falls from r ≈ 0.9 to r ≈ 0.4 when
+the split is cluster-based. Both are the same lesson in the molecular-property setting: the
+denominator, not the method, sets the number.
+
+**Tran-Nguyen et al. 2020 (LIT-PCBA)** built a benchmark specifically to remove those biases,
+and applied AVE debiasing to do it — evidence that the field's response to this problem is
+mature, not novel.
+
+Searches run for a published analogue on hand-specified objectives returned nothing on point;
+that is weak evidence of absence and is recorded in the README as such, not as a gap claim.

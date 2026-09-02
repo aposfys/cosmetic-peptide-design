@@ -133,22 +133,35 @@ with the two defects the nulls caught in this pipeline's own objectives.
 
 ### Where this sits in the literature
 
-That the choice of control or negative set drives reported performance is established.
-Virtual screening has a decoy-selection literature; molecular property prediction has a
-split-selection one, where scaffold splits are now known to overestimate performance and to
-leave classical models and graph networks largely indistinguishable; TCR–pMHC prediction has
-a negative-construction one. This repository does not claim that observation as new, and
-[`peptide-binder-design`](https://github.com/aposfys/peptide-binder-design) makes the same
-point on a published-style filter rather than a hand-built objective.
+That the choice of control or negative set drives reported performance is established, and
+this repository does not claim it as new. Virtual screening has a decoy-selection literature;
+Guo et al. showed that even scaffold splits — long treated as the realistic choice —
+overestimate performance, and Fooladi et al. found classical models and graph networks
+largely indistinguishable under them. My [`peptide-binder-design`](https://github.com/aposfys/peptide-binder-design)
+makes the same point on a published-style filter rather than a hand-built objective.
 
-The part I could not find published is the **predictor**. Everything above about controls is
-diagnosed after the fact: you run a campaign, you build a better null, and you discover how
-much of your result was composition. The order-sensitive weight is available *before* any of
-that — it is a property of the objective's algebra, not of the run — and it predicts the
-achieved scrambled AUC at r = 0.957 on the enumerated track. A term that is a function of
-composition alone returns an identical value for a sequence and its anagram, so it cannot
-contribute to separation from a scrambled control in principle. Summing those weights tells
-you your ceiling before you spend anything.
+**The closest precedent for the predictor is AVE bias.** Wallach & Heifets (2017) defined a
+computable measure of train–validation redundancy and showed it *strongly correlates with the
+performance of ligand-based methods* — the same move made here: a quantity you can compute
+about your setup, in advance, whose magnitude tells you how much of your result is going to
+be artifact. Anyone reading the order-sensitive weight as a new kind of claim should read it
+as AVE bias applied to a different object.
+
+The object is the difference, and it is a narrow one. AVE bias is a property of a **dataset
+split** and needs the data to compute. Order-sensitive weight is a property of the
+**objective's algebra** and needs nothing at all: a term that is a function of composition
+alone returns an identical value for a sequence and its anagram, so weight sitting on it
+cannot separate a design from a scrambled control *in principle*. Summing those weights is
+arithmetic over the scoring function — no molecules, no split, no training run — and here it
+predicts the achieved scrambled AUC at r = 0.957 on the enumerated track. Whether that
+specific analogue has been published for hand-specified objectives, I do not know; the
+searches I ran are below and came back empty, which is weak evidence and is not the same as
+a literature review.
+
+| Query | Verdict |
+| --- | --- |
+| `permutation invariant descriptors composition-matched controls peptide scoring` | Drifted to MS/MS peptide-spectrum scoring; nothing on point |
+| `AVE bias metric predicts inflated benchmark performance` | Returns the precedent above, on dataset splits, not objectives |
 
 Quote it with its search budget. It predicts a ceiling, and a campaign only reaches its
 ceiling once the search converges; the caveat is documented above and is the reason the
