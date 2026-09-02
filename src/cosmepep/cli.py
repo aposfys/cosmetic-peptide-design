@@ -74,13 +74,13 @@ def _audit() -> None:
         print(
             f"{name:22s} {track_name:10s} {weight:8.2f} {scrambled:10.3f} {naive:11.3f} {naive - scrambled:7.3f}"
         )
+
     def pearson(pairs: list[tuple[float, float]]) -> float:
         mean_x = sum(x for x, _ in pairs) / len(pairs)
         mean_y = sum(y for _, y in pairs) / len(pairs)
         covariance = sum((x - mean_x) * (y - mean_y) for x, y in pairs)
         spread = (
-            sum((x - mean_x) ** 2 for x, _ in pairs)
-            * sum((y - mean_y) ** 2 for _, y in pairs)
+            sum((x - mean_x) ** 2 for x, _ in pairs) * sum((y - mean_y) ** 2 for _, y in pairs)
         ) ** 0.5
         return covariance / spread if spread else 0.0
 
@@ -89,8 +89,12 @@ def _audit() -> None:
     pooled = [(row[2], row[3]) for row in rows]
 
     print("\nPearson r(order-sensitive weight, AUC vs scrambled):")
-    print(f"  encrypted track   r = {pearson(encrypted):+.3f}   n={len(encrypted)}, deterministic")
-    print(f"  de novo track     r = {pearson(de_novo):+.3f}   n={len(de_novo)}, search-budget dependent")
+    print(
+        f"  encrypted track   r = {pearson(encrypted):+.3f}   n={len(encrypted)}, deterministic"
+    )
+    print(
+        f"  de novo track     r = {pearson(de_novo):+.3f}   n={len(de_novo)}, search-budget dependent"
+    )
     print(f"  pooled            r = {pearson(pooled):+.3f}   n={len(pooled)}")
     print(
         "\nHow well an objective separates designs from their own scrambles is predicted by how\n"

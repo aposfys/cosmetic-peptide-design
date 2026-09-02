@@ -5,3 +5,4 @@ __pycache__/
 .mypy_cache/
 *.egg-info/
 results/run.log
+.ruff_cache/
