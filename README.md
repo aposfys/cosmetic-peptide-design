@@ -56,6 +56,15 @@ run, about how much separation can survive.
 It is a good prediction: across the ten programme-track cells, order-sensitive weight
 against scrambled AUC gives **r = 0.93 (p = 0.0001, R² = 0.86)**, slope 1.11.
 
+Quote that number with its search budget. It predicts a *ceiling*, and a campaign reaches its
+ceiling only once the search converges: rerun the de novo track at 6 generations × 60
+population instead of 30 × 250 and the pooled figure falls to **0.740**, because an
+under-converged optimiser sits at a different distance below each programme's limit. The
+load-bearing figure is the encrypted track's **r = 0.957** — a ranked enumeration with no
+stochastic search in it, which reproduces bit-for-bit from a fresh clone with a cold cache.
+`cosmepep audit` prints all three, and the assertion in `tests/` is pinned to the
+deterministic track for exactly this reason.
+
 | Programme | Order-sensitive weight | Scrambled AUC |
 | --- | ---: | ---: |
 | tyrosinase_modulator | 0.31 | 0.561 / 0.701 |
@@ -93,6 +102,27 @@ Several tracks saturate: 29, 39, 40, 69 and 165 candidates tie at the top score.
 happens the shortlist is a max-min diversity selection across the plateau, not a ranking,
 and the reports say so. A ranked table over tied scores would invent an order the objective
 does not support.
+
+### Two corrections the coordination chemistry forced
+
+**GHK is not an ATCUN motif.** ATCUN is Xaa-Xaa-His — four-nitrogen square-planar Cu(II)
+coordination. GHK is Xaa-His: one intervening amide, three nitrogens, lower affinity. Both are
+scored here, at 1.00 and 0.90. The copper-peptide category rests on the second and is routinely
+described as the first.
+
+**Palmitoyl tripeptide-1 cannot be a copper carrier.** Palmitoylation acylates the α-amine, and
+the α-amine is the first nitrogen either site uses to hold Cu(II). Permeation is therefore scored
+per programme on the form the peptide can actually ship in — free N-terminus for `cu_carrier`,
+acetyl/C-amide for `snare_competitor`, palmitoyl for the rest.
+
+### Three terms that measure nothing, kept rather than deleted
+
+The permeability gain from lipidation is arithmetically the same 2.55 log units for every
+sequence. Protease-site density spans the full 0.0–1.0 range across marketed peptides, so it
+separates nothing. The irritation proxy is a hydrophobic moment, undefined below two helical
+turns and therefore inert in four of five programmes. Each is the kind of term that appears in
+published scoring functions without its null — see [docs/METHODS.md](docs/METHODS.md) §6, along
+with the two defects the nulls caught in this pipeline's own objectives.
 
 ### More
 

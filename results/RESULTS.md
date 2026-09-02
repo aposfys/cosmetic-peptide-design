@@ -24,7 +24,7 @@ Plateau: 29 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | natural_fragment | 0.992 | [0.985, 0.997] | 1.73 | 0.368 |
 | **scrambled** | **0.807** | [0.775, 0.839] | 1.56 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool:
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -77,7 +77,7 @@ Plateau: 39 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | natural_fragment | 0.993 | [0.987, 0.997] | 1.74 | 0.511 |
 | **scrambled** | **0.790** | [0.756, 0.823] | 1.45 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool:
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -137,7 +137,7 @@ Plateau: 40 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | natural_fragment | 0.995 | [0.990, 0.999] | 7.24 | 0.407 |
 | **scrambled** | **0.906** | [0.885, 0.925] | 1.53 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool:
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -179,7 +179,7 @@ Plateau: 165 candidates tied at 1.0; the shortlist is a max-min diversity select
 | natural_fragment | 1.000 | [1.000, 1.000] | 8.05 | 0.459 |
 | **scrambled** | **0.912** | [0.897, 0.927] | 1.49 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool:
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -228,7 +228,7 @@ Plateau: 1 candidates tied at 0.8878; the shortlist is a max-min diversity selec
 | natural_fragment | 0.999 | [0.997, 1.000] | 8.12 | 0.429 |
 | **scrambled** | **0.939** | [0.921, 0.954] | 2.22 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool:
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -271,7 +271,7 @@ Plateau: 1 candidates tied at 0.9623; the shortlist is a max-min diversity selec
 | natural_fragment | 1.000 | [1.000, 1.000] | 10.19 | 0.592 |
 | **scrambled** | **0.987** | [0.979, 0.993] | 2.12 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool:
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |

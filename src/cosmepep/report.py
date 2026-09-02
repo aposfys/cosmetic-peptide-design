@@ -70,7 +70,15 @@ def write(campaign: dict, out: Path = RESULTS) -> Path:
             lines += _separation_table(track["separations"])
             lines.append("")
             if track["reference_calibration"]:
-                lines += ["Marketed peptides of this class, placed in the same pool:", ""]
+                lines += [
+                    "Marketed peptides of this class, placed in the same pool. A percentile of 0 "
+                    "is **not** a finding: the pool is the top 120 candidates by this composite "
+                    "and the reference compounds were not selected on it, so the comparison "
+                    "restates the objective rather than validating it. The informative case is a "
+                    "reference landing *inside* the pool, which happens once -- acetyl "
+                    "hexapeptide-8 at the 34th percentile of the SNARE programme.",
+                    "",
+                ]
                 lines += [
                     "| Peptide | INCI | Evidence | Composite | Percentile in pool |",
                     "| --- | --- | --- | ---: | ---: |",
