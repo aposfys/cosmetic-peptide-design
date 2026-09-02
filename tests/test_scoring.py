@@ -16,11 +16,11 @@ def copper(sequence: str) -> float:
 
 
 def test_atcun_beats_ghk_type_beats_stray_histidine() -> None:
-    assert copper("GGH") == 1.0          # Xaa-Xaa-His, four-nitrogen site
-    assert copper("GHK") == 0.9          # Xaa-His, three-nitrogen site
-    assert copper("GKH") == 1.0          # still position three
-    assert copper("GKAH") == 0.15        # histidine present but out of position
-    assert copper("GKAA") == 0.0         # no histidine at all
+    assert copper("GGH") == 1.0  # Xaa-Xaa-His, four-nitrogen site
+    assert copper("GHK") == 0.9  # Xaa-His, three-nitrogen site
+    assert copper("GKH") == 1.0  # still position three
+    assert copper("GKAH") == 0.15  # histidine present but out of position
+    assert copper("GKAA") == 0.0  # no histidine at all
 
 
 def test_proline_at_position_two_abolishes_the_atcun_site() -> None:
@@ -36,7 +36,12 @@ def test_site_density_counts_internal_bonds_only() -> None:
 
 
 @pytest.mark.parametrize(
-    "sequence", [k.sequence for k in KNOWN_PEPTIDES if k.mechanism_class == "matrix_signal" and k.evidence == "clinical"]
+    "sequence",
+    [
+        k.sequence
+        for k in KNOWN_PEPTIDES
+        if k.mechanism_class == "matrix_signal" and k.evidence == "clinical"
+    ],
 )
 def test_clinically_studied_matrikines_are_not_rejected(sequence: str) -> None:
     """KTTKS, GPKG and LSVD went through human studies. An objective that zeroes them is

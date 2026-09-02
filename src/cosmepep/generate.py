@@ -106,7 +106,9 @@ def seed_library(programme: Programme, limit: int = 400) -> list[Candidate]:
 
 def _mutate(sequence: str, rng: random.Random, min_length: int, max_length: int) -> str:
     operation = rng.random()
-    if operation < 0.65 or len(sequence) <= min_length and operation < 0.85:
+    # Precedence made explicit, not changed: `and` already bound tighter, so a
+    # sequence at the minimum length substitutes rather than shrinking further.
+    if operation < 0.65 or (len(sequence) <= min_length and operation < 0.85):
         position = rng.randrange(len(sequence))
         return sequence[:position] + rng.choice(RESIDUES) + sequence[position + 1 :]
     if operation < 0.85 and len(sequence) < max_length:

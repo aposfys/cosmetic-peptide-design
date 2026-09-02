@@ -22,7 +22,7 @@ dependencies = ["numpy>=1.24", "requests>=2.31", "peptides>=0.3", "rdkit>=2023.9
 
 [project.optional-dependencies]
 figures = ["matplotlib>=3.7"]
-dev = ["pytest>=7.0", "ruff>=0.6", "mypy>=1.11"]
+dev = ["pytest>=7.0", "scipy>=1.11", "ruff>=0.6", "mypy>=1.11"]
 
 [project.scripts]
 cosmepep = "cosmepep.cli:main"
@@ -52,3 +52,12 @@ exclude = ["^tests/"]
 module = ["rdkit.*", "peptides.*"]
 ignore_missing_imports = true
 follow_imports = "skip"
+
+# RDKit ships partial inline stubs: mypy resolves the package but not the
+# attributes that live on the C extensions (Descriptors.MolWt,
+# AllChem.ReactionFromSmarts, RDLogger.DisableLog). The calls are correct at
+# runtime and covered by tests, so attr-defined is disabled for the one module
+# that touches them rather than silenced globally.
+[[tool.mypy.overrides]]
+module = ["cosmepep.chemistry"]
+disable_error_code = ["attr-defined"]

@@ -48,7 +48,10 @@ def test_descriptor_reads_order(field: str) -> None:
     changed = False
     for sequence in SEQUENCES:
         reference = getattr(describe(sequence), field)
-        if any(getattr(describe(s), field) != pytest.approx(reference, abs=1e-9) for s in shuffles(sequence)):
+        if any(
+            getattr(describe(s), field) != pytest.approx(reference, abs=1e-9)
+            for s in shuffles(sequence)
+        ):
             changed = True
     assert changed, f"{field} was declared order-sensitive but never changed under shuffling"
 

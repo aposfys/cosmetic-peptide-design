@@ -101,6 +101,26 @@ Weight sitting on an invariant term cannot distinguish a design from its own scr
 in principle. That is measurable in advance, and it is the quantity that predicts what the
 pipeline achieves.
 
+### The correlation, and what it is conditional on
+
+| Subset | *r* | n | Reproducible? |
+| --- | ---: | ---: | --- |
+| Encrypted track (enumeration only) | **0.957** | 5 | Exactly — no stochastic search |
+| De novo, 30 generations x 250 | 0.977 | 5 | Seeded; converged |
+| De novo, 6 generations x 60 | 0.688 | 5 | Seeded; **under-converged** |
+| Pooled, full budget | 0.929 | 10 | — |
+
+Order-sensitive weight predicts an objective's **ceiling**, not a given campaign's result. At a
+twentieth of the search budget the de novo correlation drops by nearly 0.3, because the
+optimiser has not reached the ceiling in any programme and sits at a different distance below
+it in each. The encrypted track is the load-bearing evidence: a ranked enumeration over all
+40,026 fragments with no search in it, so it reproduces bit-for-bit from a fresh clone with a
+cold cache, and gives *r* = 0.957 on its own.
+
+Quoting the pooled 0.929 without saying which budget produced it would be the same error this
+repository is about — a number whose value depends on a choice that was not reported.
+`cosmepep audit` prints all three.
+
 ## 6. Known non-results
 
 Three terms were built, measured, and found to contribute nothing. They are documented rather

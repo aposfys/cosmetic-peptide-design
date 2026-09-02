@@ -80,7 +80,9 @@ def fetch_panel(cache: Path = DEFAULT_CACHE, refresh: bool = False) -> list[EcmP
         )
         # Selenocysteine and the ambiguity codes break every downstream descriptor; the
         # panel has none today, but a UniProt revision could introduce one silently.
-        sequence = "".join(residue for residue in sequence if residue in "ACDEFGHIKLMNPQRSTVWY")
+        sequence = "".join(
+            residue for residue in sequence if residue in "ACDEFGHIKLMNPQRSTVWY"
+        )
         proteins.append(EcmProtein(accession, gene, name, compartment, sequence))
 
     cache.parent.mkdir(parents=True, exist_ok=True)

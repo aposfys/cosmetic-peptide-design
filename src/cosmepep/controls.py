@@ -89,19 +89,23 @@ def build_controls(
 
     return {
         "scrambled": ControlSet(
-            "scrambled", tuple(scrambled),
+            "scrambled",
+            tuple(scrambled),
             "same residues, different order; separation here is separation on sequence",
         ),
         "natural_fragment": ControlSet(
-            "natural_fragment", tuple(natural),
+            "natural_fragment",
+            tuple(natural),
             "real panel sequence at matched length, selected for nothing",
         ),
         "ecm_background": ControlSet(
-            "ecm_background", tuple(ecm_random),
+            "ecm_background",
+            tuple(ecm_random),
             "random draw at the panel's own composition",
         ),
         "uniprot_background": ControlSet(
-            "uniprot_background", tuple(uniprot_random),
+            "uniprot_background",
+            tuple(uniprot_random),
             "random draw at UniProt-wide composition; the naive null",
         ),
     }

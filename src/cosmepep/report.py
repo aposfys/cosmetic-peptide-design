@@ -9,9 +9,19 @@ RESULTS = Path(__file__).resolve().parents[2] / "results"
 
 
 def _separation_table(separations: list[dict]) -> list[str]:
-    order = {"scrambled": 0, "natural_fragment": 1, "ecm_background": 2, "uniprot_background": 3}
-    rows = ["| Control family | AUC | 95% CI | Cohen's *d* | Composition distance |", "| --- | ---: | --- | ---: | ---: |"]
-    for separation in sorted(separations, key=lambda s: order.get(s["control_kind"], 9), reverse=True):
+    order = {
+        "scrambled": 0,
+        "natural_fragment": 1,
+        "ecm_background": 2,
+        "uniprot_background": 3,
+    }
+    rows = [
+        "| Control family | AUC | 95% CI | Cohen's *d* | Composition distance |",
+        "| --- | ---: | --- | ---: | ---: |",
+    ]
+    for separation in sorted(
+        separations, key=lambda s: order.get(s["control_kind"], 9), reverse=True
+    ):
         marker = "**" if separation["control_kind"] == "scrambled" else ""
         rows.append(
             f"| {marker}{separation['control_kind']}{marker} "
@@ -61,7 +71,10 @@ def write(campaign: dict, out: Path = RESULTS) -> Path:
             lines.append("")
             if track["reference_calibration"]:
                 lines += ["Marketed peptides of this class, placed in the same pool:", ""]
-                lines += ["| Peptide | INCI | Evidence | Composite | Percentile in pool |", "| --- | --- | --- | ---: | ---: |"]
+                lines += [
+                    "| Peptide | INCI | Evidence | Composite | Percentile in pool |",
+                    "| --- | --- | --- | ---: | ---: |",
+                ]
                 for reference in track["reference_calibration"]:
                     lines.append(
                         f"| {reference['sequence']} | {reference['inci']} | {reference['evidence']} "
@@ -74,15 +87,22 @@ def write(campaign: dict, out: Path = RESULTS) -> Path:
                 "| --- | --- | --- | ---: | ---: | ---: | ---: | --- |",
             ]
             for card in track["shortlist"]:
-                liabilities = ", ".join(card["chemical_liabilities"] + card["synthesis_liabilities"]) or "—"
+                liabilities = (
+                    ", ".join(card["chemical_liabilities"] + card["synthesis_liabilities"])
+                    or "—"
+                )
                 lines.append(
                     f"| `{card['sequence']}` | {card['provenance']} | {card['source_gene'] or '—'} "
                     f"| {card['composite']:.3f} | {card['delivery_mw']:.0f} "
                     f"| {card['delivery_log_kp']:.2f} | {card['charge_ph55']:+.2f} | {liabilities} |"
                 )
             lines.append("")
-            ordered = [t for t in track["per_term_vs_scrambled"] if t["declared_order_sensitive"]]
-            flat = [t for t in track["per_term_vs_scrambled"] if not t["declared_order_sensitive"]]
+            ordered = [
+                t for t in track["per_term_vs_scrambled"] if t["declared_order_sensitive"]
+            ]
+            flat = [
+                t for t in track["per_term_vs_scrambled"] if not t["declared_order_sensitive"]
+            ]
             lines += [
                 "Per-term AUC against the scrambled control. Terms declared composition-only "
                 f"({', '.join(t['term'] for t in flat)}) sit at 0.500 by construction; the "

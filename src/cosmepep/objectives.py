@@ -153,13 +153,40 @@ def developability(delivery_form: str) -> tuple[Term, ...]:
     """Terms every programme carries, with permeation bound to its deliverable form."""
     return (
         Term(
-            "permeation", 1.0, False,
-            f"Potts-Guy log Kp of the {delivery_form} form", _permeation_for(delivery_form),
+            "permeation",
+            1.0,
+            False,
+            f"Potts-Guy log Kp of the {delivery_form} form",
+            _permeation_for(delivery_form),
         ),
-        Term("chemical_stability", 0.8, True, "deamidation, oxidation, DKP, acid-labile bonds", _chemical_stability),
-        Term("synthesisability", 0.6, True, "SPPS aggregation, difficult couplings, length", _synthesisability),
-        Term("protease_resistance", 0.3, True, "skin degradome cut-site density (uninformative vs the marketed set; tie-break only)", _protease_resistance),
-        Term("irritation_margin", 0.5, True, "cationic amphipathicity as a membrane-lysis proxy", _irritation_margin),
+        Term(
+            "chemical_stability",
+            0.8,
+            True,
+            "deamidation, oxidation, DKP, acid-labile bonds",
+            _chemical_stability,
+        ),
+        Term(
+            "synthesisability",
+            0.6,
+            True,
+            "SPPS aggregation, difficult couplings, length",
+            _synthesisability,
+        ),
+        Term(
+            "protease_resistance",
+            0.3,
+            True,
+            "skin degradome cut-site density (uninformative vs the marketed set; tie-break only)",
+            _protease_resistance,
+        ),
+        Term(
+            "irritation_margin",
+            0.5,
+            True,
+            "cationic amphipathicity as a membrane-lysis proxy",
+            _irritation_margin,
+        ),
     )
 
 
@@ -193,11 +220,35 @@ def _matrix_signal_terms() -> tuple[Term, ...]:
         return 1.0 if sequence.count("K") <= 1 else 0.6
 
     return (
-        Term("length_fit", 1.0, False, "3-6 residues, as every marketed signal peptide is", fit_length),
-        Term("matrix_composition", 0.9, False, "per-residue enrichment in the skin ECM panel vs UniProt background", matrix_like),
+        Term(
+            "length_fit",
+            1.0,
+            False,
+            "3-6 residues, as every marketed signal peptide is",
+            fit_length,
+        ),
+        Term(
+            "matrix_composition",
+            0.9,
+            False,
+            "per-residue enrichment in the skin ECM panel vs UniProt background",
+            matrix_like,
+        ),
         Term("charge_fit", 0.7, False, "neutral to +2.5 at skin surface pH", charge_fit),
-        Term("hydrophilicity", 0.5, False, "hydrophilic core, delivered by the lipid tail", hydrophilicity),
-        Term("lipidation_handle", 0.8, True, "clean single-site palmitoylation, no DKP at position 2", lipidation_handle),
+        Term(
+            "hydrophilicity",
+            0.5,
+            False,
+            "hydrophilic core, delivered by the lipid tail",
+            hydrophilicity,
+        ),
+        Term(
+            "lipidation_handle",
+            0.8,
+            True,
+            "clean single-site palmitoylation, no DKP at position 2",
+            lipidation_handle,
+        ),
     )
 
 
@@ -241,8 +292,20 @@ def _cu_carrier_terms() -> tuple[Term, ...]:
         return window(describe(sequence).charge_surface, 0.5, 2.5, 1.5)
 
     return (
-        Term("copper_motif", 2.0, True, "ATCUN (Xaa-Xaa-His) or GHK-type (Xaa-His) N-terminal Cu(II) site", copper_motif),
-        Term("no_competing_thiol", 1.0, False, "Cys reduces Cu(II) and destroys the complex", no_competing_thiol),
+        Term(
+            "copper_motif",
+            2.0,
+            True,
+            "ATCUN (Xaa-Xaa-His) or GHK-type (Xaa-His) N-terminal Cu(II) site",
+            copper_motif,
+        ),
+        Term(
+            "no_competing_thiol",
+            1.0,
+            False,
+            "Cys reduces Cu(II) and destroys the complex",
+            no_competing_thiol,
+        ),
         Term("length_fit", 0.8, False, "3-5 residues, as GHK is", fit_length),
         Term("charge_fit", 0.6, False, "cationic at skin surface pH", charge_fit),
     )
@@ -282,11 +345,23 @@ def _snare_competitor_terms() -> tuple[Term, ...]:
         return rising((formers - breakers) / len(sequence), 0.0, 0.6)
 
     return (
-        Term("acidic_n_terminus", 1.6, True, "Glu/Asp at positions 1-2, as in EEMQRR", acidic_n_terminus),
+        Term(
+            "acidic_n_terminus",
+            1.6,
+            True,
+            "Glu/Asp at positions 1-2, as in EEMQRR",
+            acidic_n_terminus,
+        ),
         Term("basic_c_terminus", 0.9, True, "basic tail, as in EEMQRR", basic_c_terminus),
         Term("length_fit", 0.8, False, "6-8 residues", fit_length),
         Term("near_neutral", 0.6, False, "near-neutral at dermal pH", near_neutral),
-        Term("helix_propensity", 0.7, False, "helical character for SNARE bundle mimicry", helix_propensity),
+        Term(
+            "helix_propensity",
+            0.7,
+            False,
+            "helical character for SNARE bundle mimicry",
+            helix_propensity,
+        ),
     )
 
 
@@ -297,7 +372,9 @@ def _tyrosinase_terms() -> tuple[Term, ...]:
 
     def substrate_mimicry(sequence: str) -> float:
         """Aromatic residues that can occupy the L-tyrosine pocket."""
-        return rising(sum(sequence.count(residue) for residue in "YF") / len(sequence), 0.0, 0.4)
+        return rising(
+            sum(sequence.count(residue) for residue in "YF") / len(sequence), 0.0, 0.4
+        )
 
     def fit_length(sequence: str) -> float:
         return window(float(len(sequence)), 3.0, 6.0, 3.0)
@@ -306,9 +383,27 @@ def _tyrosinase_terms() -> tuple[Term, ...]:
         return window(describe(sequence).charge_surface, 0.0, 3.0, 2.0)
 
     return (
-        Term("copper_chelator", 1.4, False, "His content for the dicopper active site", copper_chelator),
-        Term("substrate_mimicry", 1.2, False, "Tyr/Phe for the substrate pocket", substrate_mimicry),
-        Term("length_fit", 0.7, False, "small enough to enter the active-site channel", fit_length),
+        Term(
+            "copper_chelator",
+            1.4,
+            False,
+            "His content for the dicopper active site",
+            copper_chelator,
+        ),
+        Term(
+            "substrate_mimicry",
+            1.2,
+            False,
+            "Tyr/Phe for the substrate pocket",
+            substrate_mimicry,
+        ),
+        Term(
+            "length_fit",
+            0.7,
+            False,
+            "small enough to enter the active-site channel",
+            fit_length,
+        ),
         Term("cationic", 0.5, False, "cationic at skin surface pH", cationic),
     )
 
@@ -338,9 +433,27 @@ def _barrier_amp_terms() -> tuple[Term, ...]:
 
     return (
         Term("cationicity", 1.3, False, "+3 to +6 at skin surface pH", cationicity),
-        Term("amphipathicity", 1.3, True, "hydrophobic moment on a helical wheel", amphipathicity),
-        Term("selectivity", 1.0, False, "bounded hydrophobicity as a haemolysis proxy", selectivity),
-        Term("length_fit", 0.6, False, "7-12 residues for a facially amphipathic turn", fit_length),
+        Term(
+            "amphipathicity",
+            1.3,
+            True,
+            "hydrophobic moment on a helical wheel",
+            amphipathicity,
+        ),
+        Term(
+            "selectivity",
+            1.0,
+            False,
+            "bounded hydrophobicity as a haemolysis proxy",
+            selectivity,
+        ),
+        Term(
+            "length_fit",
+            0.6,
+            False,
+            "7-12 residues for a facially amphipathic turn",
+            fit_length,
+        ),
     )
 
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 
 from .ecm import fetch_panel, residue_frequencies
@@ -17,7 +16,9 @@ def _panel() -> None:
     panel = fetch_panel()
     print(f"{'gene':10s} {'accession':10s} {'len':>6s}  compartment")
     for protein in panel:
-        print(f"{protein.gene:10s} {protein.accession:10s} {protein.length:6d}  {protein.compartment}")
+        print(
+            f"{protein.gene:10s} {protein.accession:10s} {protein.length:6d}  {protein.compartment}"
+        )
     print(f"\n{len(panel)} proteins, {sum(p.length for p in panel):,} residues")
     frequencies = residue_frequencies(panel)
     top = sorted(frequencies.items(), key=lambda pair: -pair[1])[:6]
@@ -41,7 +42,9 @@ def _degradome() -> None:
 
 def _programmes() -> None:
     for programme in PROGRAMMES:
-        print(f"{programme.key:22s} {programme.order_weight:5.0%} order-sensitive weight  {programme.title}")
+        print(
+            f"{programme.key:22s} {programme.order_weight:5.0%} order-sensitive weight  {programme.title}"
+        )
         for term in programme.all_terms:
             flag = "order" if term.order_sensitive else "comp "
             print(f"    {flag}  w={term.weight:4.1f}  {term.name:22s} {term.rationale}")
@@ -56,31 +59,57 @@ def _audit() -> None:
         for track_name, track in programme["tracks"].items():
             by_kind = {s["control_kind"]: s["auc"] for s in track["separations"]}
             rows.append(
-                (programme["programme"], track_name, programme["order_sensitive_weight"],
-                 by_kind["scrambled"], by_kind["uniprot_background"])
+                (
+                    programme["programme"],
+                    track_name,
+                    programme["order_sensitive_weight"],
+                    by_kind["scrambled"],
+                    by_kind["uniprot_background"],
+                )
             )
-    print(f"{'programme':22s} {'track':10s} {'order-w':>8s} {'scrambled':>10s} {'naive null':>11s} {'gap':>7s}")
-    for name, track_name, weight, scrambled, naive in rows:
-        print(f"{name:22s} {track_name:10s} {weight:8.2f} {scrambled:10.3f} {naive:11.3f} {naive - scrambled:7.3f}")
-    weights = [row[2] for row in rows]
-    scrambles = [row[3] for row in rows]
-    mean_weight = sum(weights) / len(weights)
-    mean_scramble = sum(scrambles) / len(scrambles)
-    covariance = sum((w - mean_weight) * (s - mean_scramble) for w, s in zip(weights, scrambles))
-    spread = (
-        sum((w - mean_weight) ** 2 for w in weights) * sum((s - mean_scramble) ** 2 for s in scrambles)
-    ) ** 0.5
     print(
-        f"\nPearson r(order-sensitive weight, AUC vs scrambled) = {covariance / spread:.3f}  "
-        f"over n={len(rows)} programme-tracks.\nHow well an objective separates designs from "
-        "their own scrambles is predicted by how much\nof its weight sits on terms that can read "
-        "order at all -- which is knowable by inspection,\nbefore anything is run."
+        f"{'programme':22s} {'track':10s} {'order-w':>8s} {'scrambled':>10s} {'naive null':>11s} {'gap':>7s}"
+    )
+    for name, track_name, weight, scrambled, naive in rows:
+        print(
+            f"{name:22s} {track_name:10s} {weight:8.2f} {scrambled:10.3f} {naive:11.3f} {naive - scrambled:7.3f}"
+        )
+    def pearson(pairs: list[tuple[float, float]]) -> float:
+        mean_x = sum(x for x, _ in pairs) / len(pairs)
+        mean_y = sum(y for _, y in pairs) / len(pairs)
+        covariance = sum((x - mean_x) * (y - mean_y) for x, y in pairs)
+        spread = (
+            sum((x - mean_x) ** 2 for x, _ in pairs)
+            * sum((y - mean_y) ** 2 for _, y in pairs)
+        ) ** 0.5
+        return covariance / spread if spread else 0.0
+
+    encrypted = [(row[2], row[3]) for row in rows if row[1] == "encrypted"]
+    de_novo = [(row[2], row[3]) for row in rows if row[1] == "de_novo"]
+    pooled = [(row[2], row[3]) for row in rows]
+
+    print("\nPearson r(order-sensitive weight, AUC vs scrambled):")
+    print(f"  encrypted track   r = {pearson(encrypted):+.3f}   n={len(encrypted)}, deterministic")
+    print(f"  de novo track     r = {pearson(de_novo):+.3f}   n={len(de_novo)}, search-budget dependent")
+    print(f"  pooled            r = {pearson(pooled):+.3f}   n={len(pooled)}")
+    print(
+        "\nHow well an objective separates designs from their own scrambles is predicted by how\n"
+        "much of its weight sits on terms that can read order at all -- knowable by inspection,\n"
+        "before anything is run.\n\n"
+        "The encrypted row is the load-bearing one: a ranked enumeration with no stochastic search\n"
+        "in it, so it reproduces exactly. The de novo row measures a ceiling that a genetic\n"
+        "algorithm only reaches once converged -- at 6 generations x 60 population it falls to\n"
+        "r = +0.688, because an under-converged search sits at varying distances below each\n"
+        "programme's ceiling. The relationship is a property of the objective; realising it is a\n"
+        "property of the run."
     )
 
 
 def _evaluate() -> None:
     campaign = load()
-    print(f"{'programme':22s} {'track':10s} {'scrambled':>10s} {'natural':>10s} {'ecm-bg':>10s} {'uniprot':>10s}")
+    print(
+        f"{'programme':22s} {'track':10s} {'scrambled':>10s} {'natural':>10s} {'ecm-bg':>10s} {'uniprot':>10s}"
+    )
     for programme in campaign["programmes"]:
         for track_name, track in programme["tracks"].items():
             by_kind = {s["control_kind"]: s["auc"] for s in track["separations"]}

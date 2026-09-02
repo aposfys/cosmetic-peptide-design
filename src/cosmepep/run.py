@@ -94,7 +94,9 @@ def _recommended_form(sequence: str, programme_key: str) -> str:
     return "N-palmitoyl / C-amide"
 
 
-def build_card(candidate: Candidate, track: str, delivery_form: str = "palmitoyl") -> DesignCard:
+def build_card(
+    candidate: Candidate, track: str, delivery_form: str = "palmitoyl"
+) -> DesignCard:
     sequence = candidate.sequence
     free = profile(sequence, "free")
     lipidated = profile(sequence, "palmitoyl")
