@@ -124,6 +124,29 @@ turns and therefore inert in four of five programmes. Each is the kind of term t
 published scoring functions without its null — see [docs/METHODS.md](docs/METHODS.md) §6, along
 with the two defects the nulls caught in this pipeline's own objectives.
 
+### Where this sits in the literature
+
+That the choice of control or negative set drives reported performance is established.
+Virtual screening has a decoy-selection literature; molecular property prediction has a
+split-selection one, where scaffold splits are now known to overestimate performance and to
+leave classical models and graph networks largely indistinguishable; TCR–pMHC prediction has
+a negative-construction one. This repository does not claim that observation as new, and
+[`peptide-binder-design`](https://github.com/aposfys/peptide-binder-design) makes the same
+point on a published-style filter rather than a hand-built objective.
+
+The part I could not find published is the **predictor**. Everything above about controls is
+diagnosed after the fact: you run a campaign, you build a better null, and you discover how
+much of your result was composition. The order-sensitive weight is available *before* any of
+that — it is a property of the objective's algebra, not of the run — and it predicts the
+achieved scrambled AUC at r = 0.957 on the enumerated track. A term that is a function of
+composition alone returns an identical value for a sequence and its anagram, so it cannot
+contribute to separation from a scrambled control in principle. Summing those weights tells
+you your ceiling before you spend anything.
+
+Quote it with its search budget. It predicts a ceiling, and a campaign only reaches its
+ceiling once the search converges; the caveat is documented above and is the reason the
+enumerated track carries the claim.
+
 ### More
 
 - [Results](results/RESULTS.md) — every programme, track, control family and per-term AUC
