@@ -86,16 +86,26 @@ def _audit() -> None:
 
     encrypted = [(row[2], row[3]) for row in rows if row[1] == "encrypted"]
     de_novo = [(row[2], row[3]) for row in rows if row[1] == "de_novo"]
-    pooled = [(row[2], row[3]) for row in rows]
+    by_programme: dict[str, list[float]] = {}
+    weight_of: dict[str, float] = {}
+    for name, _, weight, scrambled, *_ in rows:
+        by_programme.setdefault(name, []).append(scrambled)
+        weight_of[name] = weight
+    programme_mean = [
+        (weight_of[name], sum(aucs) / len(aucs)) for name, aucs in by_programme.items()
+    ]
 
     print("\nPearson r(order-sensitive weight, AUC vs scrambled):")
+    for label, pairs, note in (
+        ("encrypted track", encrypted, "deterministic"),
+        ("de novo track", de_novo, "search-budget dependent"),
+        ("programme mean", programme_mean, "both tracks averaged"),
+    ):
+        print(f"  {label:16s} r = {pearson(pairs):+.3f}   n={len(pairs)}, {note}")
     print(
-        f"  encrypted track   r = {pearson(encrypted):+.3f}   n={len(encrypted)}, deterministic"
+        f"  {'pooled':16s} r = {pearson(encrypted + de_novo):+.3f}   "
+        f"n={len(rows)} rows but only {len(programme_mean)} distinct weights -- see below"
     )
-    print(
-        f"  de novo track     r = {pearson(de_novo):+.3f}   n={len(de_novo)}, search-budget dependent"
-    )
-    print(f"  pooled            r = {pearson(pooled):+.3f}   n={len(pooled)}")
     print(
         "\nHow well an objective separates designs from their own scrambles is predicted by how\n"
         "much of its weight sits on terms that can read order at all -- knowable by inspection,\n"
@@ -105,7 +115,12 @@ def _audit() -> None:
         "algorithm only reaches once converged -- at 6 generations x 60 population it falls to\n"
         "r = +0.688, because an under-converged search sits at varying distances below each\n"
         "programme's ceiling. The relationship is a property of the objective; realising it is a\n"
-        "property of the run."
+        "property of the run.\n\n"
+        "Do not read a p-value off the pooled row. Order-sensitive weight is a property of the\n"
+        "objective, so both tracks of a programme carry the identical x: the pooled row is ten\n"
+        "points over five distinct weights, and treating it as ten independent observations\n"
+        "understates p by about two orders of magnitude (0.0001 against 0.0105 for the encrypted\n"
+        "track alone). The n=5 rows are the ones with an honest denominator."
     )
 
 

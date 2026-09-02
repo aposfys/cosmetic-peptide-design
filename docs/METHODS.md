@@ -108,7 +108,8 @@ pipeline achieves.
 | Encrypted track (enumeration only) | **0.957** | 5 | Exactly — no stochastic search |
 | De novo, 30 generations x 250 | 0.977 | 5 | Seeded; converged |
 | De novo, 6 generations x 60 | 0.688 | 5 | Seeded; **under-converged** |
-| Pooled, full budget | 0.929 | 10 | — |
+| De novo and encrypted averaged per programme | 0.989 | 5 | — |
+| Pooled, full budget | 0.929 | 10 rows, 5 distinct x | — |
 
 Order-sensitive weight predicts an objective's **ceiling**, not a given campaign's result. At a
 twentieth of the search budget the de novo correlation drops by nearly 0.3, because the
@@ -119,6 +120,13 @@ cold cache, and gives *r* = 0.957 on its own.
 
 Quoting the pooled 0.929 without saying which budget produced it would be the same error this
 repository is about — a number whose value depends on a choice that was not reported.
+
+The pooled row carries a second problem, and it is a denominator problem too. Order-sensitive
+weight is a property of the objective, so a programme's two tracks share an identical x value:
+the ten pooled points sit over five distinct weights. `scipy.stats.pearsonr` has no way to know
+that and returns p = 0.0001 on the assumption of ten independent observations, against p = 0.0105
+for the five encrypted points alone. The correlation coefficient is a fair descriptive summary;
+the pooled p-value is not, and this repository does not quote it.
 `cosmepep audit` prints all three.
 
 ## 6. Known non-results

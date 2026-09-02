@@ -53,8 +53,15 @@ separation from a scrambled control **even in principle**. The fraction of objec
 carried by the order-sensitive terms is therefore a prediction, made before any control is
 run, about how much separation can survive.
 
-It is a good prediction: across the ten programme-track cells, order-sensitive weight
-against scrambled AUC gives **r = 0.93 (p = 0.0001, R² = 0.86)**, slope 1.11.
+It is a good prediction. Per programme, order-sensitive weight against scrambled AUC gives
+**r = 0.957** on the encrypted track (p = 0.011) and **0.977** on the de novo track (p = 0.004);
+averaging the two tracks gives 0.989.
+
+Pooling all ten cells gives r = 0.93, but that figure needs a caveat rather than a p-value:
+order weight is a property of the *programme*, so both tracks of a programme carry an identical
+x. The pooled row is ten points over five distinct weights, and `pearsonr` treating it as ten
+independent observations returns p = 0.0001 — roughly two orders of magnitude too small. The
+n = 5 rows are the ones with an honest denominator.
 
 Quote that number with its search budget. It predicts a *ceiling*, and a campaign reaches its
 ceiling only once the search converges: rerun the de novo track at 6 generations × 60
@@ -62,7 +69,7 @@ population instead of 30 × 250 and the pooled figure falls to **0.740**, becaus
 under-converged optimiser sits at a different distance below each programme's limit. The
 load-bearing figure is the encrypted track's **r = 0.957** — a ranked enumeration with no
 stochastic search in it, which reproduces bit-for-bit from a fresh clone with a cold cache.
-`cosmepep audit` prints all three, and the assertion in `tests/` is pinned to the
+`cosmepep audit` prints all four, and the assertion in `tests/` is pinned to the
 deterministic track for exactly this reason.
 
 | Programme | Order-sensitive weight | Scrambled AUC |

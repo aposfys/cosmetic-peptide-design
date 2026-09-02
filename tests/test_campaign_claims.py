@@ -112,3 +112,28 @@ def test_reference_calibration_is_reported_even_though_it_is_circular(campaign):
     assert percentiles, "reference calibration was dropped from the report"
     at_floor = sum(1 for value in percentiles if value == 0.0)
     assert at_floor / len(percentiles) > 0.8
+
+
+def test_tracks_of_a_programme_share_one_order_weight(campaign):
+    """Why the pooled correlation must not be given a p-value.
+
+    Order-sensitive weight is a property of the objective, not of a run, so both
+    tracks of a programme carry an identical x. The ten pooled points therefore
+    sit over five distinct weights, and any test that treats them as ten
+    independent observations understates p by about two orders of magnitude.
+    """
+    weights: dict[str, set[float]] = {}
+    for programme, _, _, _ in _cells(campaign):
+        weights.setdefault(programme["programme"], set()).add(
+            programme["order_sensitive_weight"]
+        )
+    assert all(len(values) == 1 for values in weights.values())
+    assert len(weights) < sum(1 for _ in _cells(campaign))
+
+
+def test_the_inflated_p_value_is_not_quoted_anywhere(campaign):
+    """The pooled p = 0.0001 is the repository's own house error if it survives."""
+    root = CAMPAIGN.parents[1]
+    for document in (root / "README.md", root / "docs" / "METHODS.md"):
+        text = document.read_text(encoding="utf-8")
+        assert "p = 0.0001, R" not in text, f"{document.name} quotes the pooled p-value"
