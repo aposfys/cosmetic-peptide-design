@@ -6,6 +6,9 @@ Nineteen human proteins are fetched from UniProt and cached (`data/cache/ecm_pro
 the fibrillar collagens of the dermis, the elastic fibre, the dermal-epidermal junction and
 basement membrane, two small leucine-rich proteoglycans, and filaggrin. 38,211 residues.
 
+Those sequences are redistributed in the cache under CC BY 4.0, the licence UniProt publishes
+its data under. The nineteen accessions are listed in `src/cosmepep/ecm.py`.
+
 Ten protease specificity rules stand in for the skin degradome — MMP-1, the gelatinases,
 MMP-12, neutrophil elastase, cathepsins G and K, the desquamation kallikreins KLK5 and KLK7,
 mast-cell chymase, and the commensal glutamyl endopeptidases (V8/Esp) that are abundant on
@@ -165,6 +168,15 @@ for the five encrypted points alone. The correlation coefficient is a fair descr
 the pooled p-value is not, and this repository does not quote it.
 `cosmepep audit` prints all four rows.
 
+### Plateaus, not rankings
+
+Several tracks saturate: 29, 39, 40, 69 and 165 candidates tie at the top composite. A bounded
+desirability objective built from windows and ramps does not have a unique optimum, it has a
+plateau, so where one exists the shortlist is a max-min diversity selection across it rather
+than a ranking, and `plateau_size` is reported for every track. A ranked table over tied scores
+would invent an order the objective does not support. `plateau` groups candidates within 1e-9
+of the best.
+
 ## 6. Known non-results
 
 Three terms were built, measured, and found to contribute nothing. They are documented rather
@@ -205,7 +217,7 @@ prioritised, chemically annotated hypothesis list with its null distributions at
 composite is a desirability aggregate over heuristics, and none of the five mechanisms has
 been demonstrated for any sequence here.
 
-## 8. Prior work the order-sensitivity claim has to be read against
+## 9. Prior work the order-sensitivity claim has to be read against
 
 **Wallach & Heifets, *J Chem Inf Model* 2017 — "Most Ligand-Based Benchmarks Measure
 Overfitting Rather than Accuracy."** Defines AVE bias, a computable measure of
@@ -228,5 +240,29 @@ denominator, not the method, sets the number.
 and applied AVE debiasing to do it — evidence that the field's response to this problem is
 mature, not novel.
 
-Searches run for a published analogue on hand-specified objectives returned nothing on point;
-that is weak evidence of absence and is recorded in the README as such, not as a gap claim.
+### What is and is not being claimed
+
+That the choice of control or negative set drives reported performance is established, and this
+repository does not claim it as new. Virtual screening has a decoy-selection literature,
+molecular property prediction has a split-selection one, and TCR-pMHC prediction has a
+negative-construction one. My
+[`peptide-binder-design`](https://github.com/aposfys/peptide-binder-design) makes the same point
+on a published-style filter rather than a hand-built objective.
+
+The order-sensitive weight should be read as AVE bias applied to a different object, not as a
+new kind of claim. The difference is narrow. AVE bias is a property of a **dataset split** and
+needs the data to compute. Order-sensitive weight is a property of the **objective's algebra**
+and needs nothing at all, since a term that is a function of composition alone returns an
+identical value for a sequence and its anagram, so weight sitting on it cannot separate a design
+from a scrambled control *in principle*. Summing those weights is arithmetic over the scoring
+function, with no molecules, no split and no training run, and here it predicts the achieved
+scrambled AUC at *r* = 0.957 on the enumerated track.
+
+Whether that specific analogue has been published for hand-specified objectives I do not know.
+The searches below came back empty, which is weak evidence of absence and is not a literature
+review.
+
+| Query | Verdict |
+| --- | --- |
+| `permutation invariant descriptors composition-matched controls peptide scoring` | Drifted to MS/MS peptide-spectrum scoring, nothing on point |
+| `AVE bias metric predicts inflated benchmark performance` | Returns the precedent above, on dataset splits, not objectives |
