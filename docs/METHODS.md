@@ -89,8 +89,8 @@ rather than an assertion. The scrambled family must come out at exactly 0.000.
 ## 5. Permutation invariance
 
 Of sixteen descriptors, ten are functions of amino-acid composition alone and take the same
-value for a sequence and for any shuffle of it. `tests/test_invariance.py` asserts this
-residue by residue rather than trusting the claim.
+value for a sequence and for any shuffle of it, to within floating-point rounding.
+`tests/test_invariance.py` asserts this against actual shuffles rather than trusting the claim.
 
 **Invariant:** molecular weight, charge at pH 5.5 and 7.4, isoelectric point, GRAVY, Boman
 index, aliphatic index, length, and the two composition fractions.
@@ -100,6 +100,37 @@ index, aliphatic index, length, and the two composition fractions.
 Weight sitting on an invariant term cannot distinguish a design from its own scramble, even
 in principle. That is measurable in advance, and it is the quantity that predicts what the
 pipeline achieves.
+
+### Why the invariant per-term AUCs are 0.500 and not exactly 0.500
+
+RESULTS.md reports a per-term AUC against the scrambled control for every term, and for the
+terms declared composition-only ten of forty-four cells read 0.4977 to 0.5057 rather than
+0.5000. Two things cause that, and neither is a term reading sequence order.
+
+**Floating-point summation order.** Molecular weight, GRAVY and the Boman index are sums over
+residues taken in sequence order, so an anagram accumulates the same addends in a different
+order and lands one or two units in the last place away. Over all 420 distinct anagrams of
+`KKIKPLL` the largest disagreement is 1.1e-13 Da in molecular weight and 2.5e-16 in GRAVY,
+which is why `tests/test_invariance.py` asserts invariance to 1e-9 rather than bit equality.
+`roc_auc`
+gives ties exactly half credit by comparing floats for equality, and these objectives are
+bounded desirabilities that clamp, so most of a pool sits on one large tie at 1.0. A
+difference of 1e-16 splits that tie and moves the AUC by up to a few thousandths. Rounding
+each term's scores to twelve decimals before the comparison returns every affected cell to
+exactly 0.500, which is what identifies rounding rather than order as the cause.
+
+**One real exception, in `permeation`.** Crippen log P types an atom from its neighbours, and
+a free N-terminal proline is a ring secondary amine where an internal proline is an amide. So
+`log Kp` of the free-amine form shifts by 0.0579 log units depending on whether a proline sits
+first, and `cu_carrier` is the one programme delivered free rather than palmitoylated or
+acetyl-capped. Its `permeation` cell stays off 0.500 after rounding for that reason. The
+dependence is real and it is tiny, one desirability step of about 0.006, so the term is left
+declared composition-only rather than reclassified. It is recorded here instead of being
+smoothed over.
+
+Neither effect reaches any other reported number. The twenty composite AUCs are separations of
+0.56 to 1.00 with nothing near a tie, and `plateau` groups candidates within 1e-9, five orders
+of magnitude above the jitter.
 
 ### The correlation, and what it is conditional on
 

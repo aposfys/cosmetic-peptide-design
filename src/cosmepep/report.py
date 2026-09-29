@@ -70,13 +70,34 @@ def write(campaign: dict, out: Path = RESULTS) -> Path:
             lines += _separation_table(track["separations"])
             lines.append("")
             if track["reference_calibration"]:
+                inside = [
+                    reference
+                    for reference in track["reference_calibration"]
+                    if reference["percentile_in_pool"] > 0.0
+                ]
+                if inside:
+                    verdict = (
+                        "The informative case is a reference landing *inside* the pool. "
+                        + (
+                            "; ".join(
+                                f"{reference['inci']} reaches percentile "
+                                f"{reference['percentile_in_pool']:.0f} here"
+                                for reference in inside
+                            )
+                            + "."
+                        )
+                    )
+                else:
+                    verdict = (
+                        "Every reference in this pool sits at the floor, so this table carries "
+                        "no information about the designs at all."
+                    )
                 lines += [
                     "Marketed peptides of this class, placed in the same pool. A percentile of 0 "
-                    "is **not** a finding: the pool is the top 120 candidates by this composite "
-                    "and the reference compounds were not selected on it, so the comparison "
-                    "restates the objective rather than validating it. The informative case is a "
-                    "reference landing *inside* the pool, which happens once -- acetyl "
-                    "hexapeptide-8 at the 34th percentile of the SNARE programme.",
+                    f"is **not** a finding: the pool is the top {track['n_evaluated']} candidates "
+                    "by this composite and the reference compounds were not selected on it, so "
+                    "the comparison restates the objective rather than validating it. "
+                    + verdict,
                     "",
                 ]
                 lines += [
@@ -111,10 +132,20 @@ def write(campaign: dict, out: Path = RESULTS) -> Path:
             flat = [
                 t for t in track["per_term_vs_scrambled"] if not t["declared_order_sensitive"]
             ]
+            worst = max((abs(t["auc_vs_scrambled"] - 0.5) for t in flat), default=0.0)
+            residual = (
+                "sit at exactly 0.500 here"
+                if worst == 0.0
+                else (
+                    f"sit at 0.500 to within {worst:.4f} here. That residual is not a term "
+                    "reading sequence order; its two sources are set out in "
+                    "[METHODS](../docs/METHODS.md) section 5"
+                )
+            )
             lines += [
                 "Per-term AUC against the scrambled control. Terms declared composition-only "
-                f"({', '.join(t['term'] for t in flat)}) sit at 0.500 by construction; the "
-                "separation such as it is comes from "
+                f"({', '.join(t['term'] for t in flat)}) return the same value for a sequence "
+                f"and its anagram, so they {residual}. The separation such as it is comes from "
                 f"{', '.join(t['term'] for t in ordered)}.",
                 "",
                 "| Term | Weight | Order-sensitive | AUC vs scrambled |",

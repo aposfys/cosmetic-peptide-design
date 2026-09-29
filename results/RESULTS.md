@@ -24,7 +24,7 @@ Plateau: 29 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | natural_fragment | 0.992 | [0.985, 0.997] | 1.73 | 0.368 |
 | **scrambled** | **0.807** | [0.775, 0.839] | 1.56 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. Every reference in this pool sits at the floor, so this table carries no information about the designs at all.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -51,7 +51,7 @@ Marketed peptides of this class, placed in the same pool. A percentile of 0 is *
 | `GKPG` | encrypted | COL1A1 | 1.000 | 596 | -3.93 | +1.00 | — |
 | `RGPP` | encrypted | COL1A1 | 1.000 | 664 | -4.34 | +1.00 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, matrix_composition, charge_fit, hydrophilicity, permeation) sit at 0.500 by construction; the separation such as it is comes from lipidation_handle, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, matrix_composition, charge_fit, hydrophilicity, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0002 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from lipidation_handle, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -77,7 +77,7 @@ Plateau: 39 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | natural_fragment | 0.993 | [0.987, 0.997] | 1.74 | 0.511 |
 | **scrambled** | **0.790** | [0.756, 0.823] | 1.45 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool. Palmitoyl tetrapeptide-7 reaches percentile 13 here.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -104,7 +104,7 @@ Marketed peptides of this class, placed in the same pool. A percentile of 0 is *
 | `GGHP` | de_novo | — | 1.000 | 605 | -4.10 | +0.76 | — |
 | `FGSPP` | de_novo | — | 1.000 | 742 | -4.49 | +0.00 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, matrix_composition, charge_fit, hydrophilicity, permeation) sit at 0.500 by construction; the separation such as it is comes from lipidation_handle, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, matrix_composition, charge_fit, hydrophilicity, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0009 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from lipidation_handle, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -137,7 +137,7 @@ Plateau: 40 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | natural_fragment | 0.995 | [0.990, 0.999] | 7.24 | 0.407 |
 | **scrambled** | **0.906** | [0.885, 0.925] | 1.53 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. Every reference in this pool sits at the floor, so this table carries no information about the designs at all.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -154,7 +154,7 @@ Marketed peptides of this class, placed in the same pool. A percentile of 0 is *
 | `GIHGL` | encrypted | COL4A3 | 1.000 | 496 | -6.68 | +0.76 | — |
 | `TGHY` | encrypted | LAMA3 | 1.000 | 476 | -7.18 | +0.76 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (no_competing_thiol, length_fit, charge_fit, permeation) sit at 0.500 by construction; the separation such as it is comes from copper_motif, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (no_competing_thiol, length_fit, charge_fit, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0015 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from copper_motif, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -179,7 +179,7 @@ Plateau: 165 candidates tied at 1.0; the shortlist is a max-min diversity select
 | natural_fragment | 1.000 | [1.000, 1.000] | 8.05 | 0.459 |
 | **scrambled** | **0.912** | [0.897, 0.927] | 1.49 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. Every reference in this pool sits at the floor, so this table carries no information about the designs at all.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -196,7 +196,7 @@ Marketed peptides of this class, placed in the same pool. A percentile of 0 is *
 | `TYHA` | de_novo | — | 1.000 | 491 | -6.99 | +0.76 | — |
 | `KSHF` | de_novo | — | 1.000 | 518 | -7.15 | +1.76 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (no_competing_thiol, length_fit, charge_fit, permeation) sit at 0.500 by construction; the separation such as it is comes from copper_motif, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (no_competing_thiol, length_fit, charge_fit, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0008 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from copper_motif, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -228,7 +228,7 @@ Plateau: 1 candidates tied at 0.8878; the shortlist is a max-min diversity selec
 | natural_fragment | 0.999 | [0.997, 1.000] | 8.12 | 0.429 |
 | **scrambled** | **0.939** | [0.921, 0.954] | 2.22 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool. Acetyl hexapeptide-8 (Argireline) reaches percentile 34 here.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -245,7 +245,7 @@ Marketed peptides of this class, placed in the same pool. A percentile of 0 is *
 | `EDVRR` | encrypted | LAMB3 | 0.856 | 715 | -10.30 | +0.07 | polyarginine:RR |
 | `DEFFLK` | encrypted | COL6A3 | 0.854 | 839 | -8.24 | -0.93 | beta_sheet_run:FFL, bulky_pair:FF |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, near_neutral, helix_propensity, permeation) sit at 0.500 by construction; the separation such as it is comes from acidic_n_terminus, basic_c_terminus, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, near_neutral, helix_propensity, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0023 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from acidic_n_terminus, basic_c_terminus, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -271,7 +271,7 @@ Plateau: 1 candidates tied at 0.9623; the shortlist is a max-min diversity selec
 | natural_fragment | 1.000 | [1.000, 1.000] | 10.19 | 0.592 |
 | **scrambled** | **0.987** | [0.979, 0.993] | 2.12 | 0.000 |
 
-Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. The informative case is a reference landing *inside* the pool, which happens once -- acetyl hexapeptide-8 at the 34th percentile of the SNARE programme.
+Marketed peptides of this class, placed in the same pool. A percentile of 0 is **not** a finding: the pool is the top 120 candidates by this composite and the reference compounds were not selected on it, so the comparison restates the objective rather than validating it. Every reference in this pool sits at the floor, so this table carries no information about the designs at all.
 
 | Peptide | INCI | Evidence | Composite | Percentile in pool |
 | --- | --- | --- | ---: | ---: |
@@ -288,7 +288,7 @@ Marketed peptides of this class, placed in the same pool. A percentile of 0 is *
 | `EELIKK` | de_novo | — | 0.940 | 800 | -8.66 | +0.11 | — |
 | `DEFAKK` | de_novo | — | 0.935 | 778 | -9.39 | +0.07 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, near_neutral, helix_propensity, permeation) sit at 0.500 by construction; the separation such as it is comes from acidic_n_terminus, basic_c_terminus, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (length_fit, near_neutral, helix_propensity, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0001 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from acidic_n_terminus, basic_c_terminus, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -329,7 +329,7 @@ Plateau: 3 candidates tied at 0.9226; the shortlist is a max-min diversity selec
 | `HFHL` | encrypted | HSPG2 | 0.923 | 791 | -3.47 | +1.52 | — |
 | `HGHF` | encrypted | FLG | 0.923 | 735 | -4.13 | +1.52 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (copper_chelator, substrate_mimicry, length_fit, cationic, permeation) sit at 0.500 by construction; the separation such as it is comes from chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (copper_chelator, substrate_mimicry, length_fit, cationic, permeation) return the same value for a sequence and its anagram, so they sit at exactly 0.500 here. The separation such as it is comes from chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -365,7 +365,7 @@ Plateau: 69 candidates tied at 1.0; the shortlist is a max-min diversity selecti
 | `FHHF` | de_novo | — | 1.000 | 825 | -3.54 | +1.52 | — |
 | `IHFHY` | de_novo | — | 1.000 | 954 | -4.16 | +1.52 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (copper_chelator, substrate_mimicry, length_fit, cationic, permeation) sit at 0.500 by construction; the separation such as it is comes from chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (copper_chelator, substrate_mimicry, length_fit, cationic, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0001 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -407,7 +407,7 @@ Plateau: 1 candidates tied at 0.8941; the shortlist is a max-min diversity selec
 | `KKALKLM` | encrypted | COL3A1 | 0.876 | 1070 | -5.53 | +3.00 | oxidation_M:M |
 | `KGLKGLP` | encrypted | COL4A3 | 0.850 | 950 | -5.61 | +2.00 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (cationicity, selectivity, length_fit, permeation) sit at 0.500 by construction; the separation such as it is comes from amphipathicity, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (cationicity, selectivity, length_fit, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0016 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from amphipathicity, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |
@@ -443,7 +443,7 @@ Plateau: 1 candidates tied at 0.9491; the shortlist is a max-min diversity selec
 | `LKIKKLI` | de_novo | — | 0.923 | 1094 | -4.74 | +3.00 | — |
 | `VRIKKPF` | de_novo | — | 0.921 | 1126 | -6.07 | +3.00 | — |
 
-Per-term AUC against the scrambled control. Terms declared composition-only (cationicity, selectivity, length_fit, permeation) sit at 0.500 by construction; the separation such as it is comes from amphipathicity, chemical_stability, synthesisability, protease_resistance, irritation_margin.
+Per-term AUC against the scrambled control. Terms declared composition-only (cationicity, selectivity, length_fit, permeation) return the same value for a sequence and its anagram, so they sit at 0.500 to within 0.0057 here. That residual is not a term reading sequence order; its two sources are set out in [METHODS](../docs/METHODS.md) section 5. The separation such as it is comes from amphipathicity, chemical_stability, synthesisability, protease_resistance, irritation_margin.
 
 | Term | Weight | Order-sensitive | AUC vs scrambled |
 | --- | ---: | --- | ---: |

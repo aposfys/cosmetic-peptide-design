@@ -137,3 +137,44 @@ def test_the_inflated_p_value_is_not_quoted_anywhere(campaign):
     for document in (root / "README.md", root / "docs" / "METHODS.md"):
         text = document.read_text(encoding="utf-8")
         assert "p = 0.0001, R" not in text, f"{document.name} quotes the pooled p-value"
+
+
+def test_every_reference_row_inside_its_pool_is_named_in_the_readme(campaign):
+    """The README used to say the informative case happens once. It happens twice.
+
+    A reference landing inside the design pool is the only cell where the calibration
+    carries information, so the count and the identities both have to match the campaign
+    rather than being carried over from an earlier run.
+    """
+    inside = [
+        (programme["programme"], track_name, reference)
+        for programme, track_name, track, _ in _cells(campaign)
+        for reference in track["reference_calibration"]
+        if reference["percentile_in_pool"] > 0.0
+    ]
+    assert len(inside) == 2
+    readme = (CAMPAIGN.parents[1] / "README.md").read_text(encoding="utf-8")
+    for _, _, reference in inside:
+        assert reference["sequence"] in readme
+        assert f"percentile {reference['percentile_in_pool']:.0f}" in readme
+    results = (CAMPAIGN.parent / "RESULTS.md").read_text(encoding="utf-8")
+    assert "which happens once" not in results
+
+
+def test_no_document_claims_the_invariant_terms_are_exactly_half(campaign):
+    """Ten of the forty-four declared-invariant cells are not 0.500, so nothing may say
+    they are there *by construction*. The terms are invariant; the reported AUC is invariant
+    to within floating-point rounding, which is a different sentence.
+    """
+    flat = [
+        term
+        for _, _, track, _ in _cells(campaign)
+        for term in track["per_term_vs_scrambled"]
+        if not term["declared_order_sensitive"]
+    ]
+    off = [term for term in flat if term["auc_vs_scrambled"] != 0.5]
+    assert off, "if every cell is exactly 0.500 this guard can be dropped"
+    assert all(abs(term["auc_vs_scrambled"] - 0.5) < 0.01 for term in flat)
+    root = CAMPAIGN.parents[1]
+    for document in (root / "results" / "RESULTS.md", root / "README.md"):
+        assert "0.500 by construction" not in document.read_text(encoding="utf-8")

@@ -87,18 +87,23 @@ compared against what it actually achieves.
 
 ### The reference calibration is circular, and is reported as such
 
-Eleven marketed cosmetic peptides — including KTTKS, whose clinical evidence is the reason
-the class exists, and GPKG and LSVD from a published split-face trial — are scored in the
-same pool as the designs. Almost all of them land at **percentile 0**: no design scores
-below them.
+Fifteen marketed cosmetic peptides are in the panel, each placed in the pool of the programme
+whose mechanism class it belongs to. Eleven of them fall in `matrix_signal`, including KTTKS,
+whose clinical evidence is the reason the class exists, and GPKG and LSVD from a published
+split-face trial. `cu_carrier` and `snare_competitor` carry one each, two are in neither
+class, and `tyrosinase_modulator` and `barrier_amp` carry none, so those two programmes have
+no reference calibration at all. Of the twenty-six reference rows in the campaign,
+twenty-four land at **percentile 0**: no design scores below them.
 
 That is not evidence the designs are better. The designs were produced by an evolutionary
 search *maximising this composite*, and the marketed peptides were not. A pool optimised on
 a function will outrank anything not optimised on it, so the percentile restates the search
 objective rather than validating it. It is kept in the output because a pipeline that
-quietly dropped it would look like it had a calibration; the one exception, where a
-reference reaches the 34th percentile, is the only cell where the comparison carries any
-information at all.
+quietly dropped it would look like it had a calibration. Two rows land *inside* their pool
+rather than under it, and those two are the only cells where the comparison carries any
+information at all: palmitoyl tetrapeptide-7 (GQPR) at percentile 13 in the `matrix_signal`
+de novo pool, and acetyl hexapeptide-8 (EEMQRR) at percentile 34 in the `snare_competitor`
+enumeration.
 
 **Nothing here was measured in a laboratory.** Every quantity is a model output over
 enumerated fragments and published amino-acid scales. The shortlists are hypotheses.
