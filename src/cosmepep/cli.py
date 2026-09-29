@@ -6,10 +6,11 @@ import argparse
 import sys
 
 from .ecm import fetch_panel, residue_frequencies
+from .evaluate import pearson
 from .objectives import PROGRAMMES
 from .proteases import PROTEASES, enumerate_fragments
-from .report import load, write
-from .run import run_all
+from .report import load, load_sensitivity, write
+from .run import SENSITIVITY_BUDGET, run_all, run_budget_sensitivity
 
 
 def _panel() -> None:
@@ -75,15 +76,6 @@ def _audit() -> None:
             f"{name:22s} {track_name:10s} {weight:8.2f} {scrambled:10.3f} {naive:11.3f} {naive - scrambled:7.3f}"
         )
 
-    def pearson(pairs: list[tuple[float, float]]) -> float:
-        mean_x = sum(x for x, _ in pairs) / len(pairs)
-        mean_y = sum(y for _, y in pairs) / len(pairs)
-        covariance = sum((x - mean_x) * (y - mean_y) for x, y in pairs)
-        spread = (
-            sum((x - mean_x) ** 2 for x, _ in pairs) * sum((y - mean_y) ** 2 for _, y in pairs)
-        ) ** 0.5
-        return covariance / spread if spread else 0.0
-
     encrypted = [(row[2], row[3]) for row in rows if row[1] == "encrypted"]
     de_novo = [(row[2], row[3]) for row in rows if row[1] == "de_novo"]
     by_programme: dict[str, list[float]] = {}
@@ -94,6 +86,10 @@ def _audit() -> None:
     programme_mean = [
         (weight_of[name], sum(aucs) / len(aucs)) for name, aucs in by_programme.items()
     ]
+
+    sensitivity = load_sensitivity()
+    budget = f"{sensitivity['generations']} generations x {sensitivity['population_size']} population"
+    reduced = sensitivity["correlations"]["de_novo"]
 
     print("\nPearson r(order-sensitive weight, AUC vs scrambled):")
     for label, pairs, note in (
@@ -112,10 +108,10 @@ def _audit() -> None:
         "before anything is run.\n\n"
         "The encrypted row is the load-bearing one: a ranked enumeration with no stochastic search\n"
         "in it, so it reproduces exactly. The de novo row measures a ceiling that a genetic\n"
-        "algorithm only reaches once converged -- at 6 generations x 60 population it falls to\n"
-        "r = +0.688, because an under-converged search sits at varying distances below each\n"
-        "programme's ceiling. The relationship is a property of the objective; realising it is a\n"
-        "property of the run.\n\n"
+        f"algorithm only reaches once converged -- at {budget} it falls to r = {reduced:+.3f},\n"
+        "because an under-converged search sits at varying distances below each programme's\n"
+        "ceiling. The relationship is a property of the objective; realising it is a property of\n"
+        "the run.\n\n"
         "Do not read a p-value off the pooled row. Order-sensitive weight is a property of the\n"
         "objective, so both tracks of a programme carry the identical x: the pooled row is ten\n"
         "points over five distinct weights, and treating it as ten independent observations\n"
@@ -149,6 +145,12 @@ def main(argv: list[str] | None = None) -> int:
     design.add_argument("--generations", type=int, default=30)
     design.add_argument("--population", type=int, default=250)
     design.add_argument("--seed", type=int, default=0)
+    sensitivity = subparsers.add_parser(
+        "sensitivity", help="rerun at a reduced search budget and write the correlation"
+    )
+    sensitivity.add_argument("--generations", type=int, default=SENSITIVITY_BUDGET[0])
+    sensitivity.add_argument("--population", type=int, default=SENSITIVITY_BUDGET[1])
+    sensitivity.add_argument("--seed", type=int, default=0)
     subparsers.add_parser("evaluate", help="separation table from an existing campaign")
     subparsers.add_parser("audit", help="order-sensitive weight against achieved separation")
     subparsers.add_parser("report", help="write results/RESULTS.md from campaign.json")
@@ -166,6 +168,16 @@ def main(argv: list[str] | None = None) -> int:
         )
         path = write(campaign)
         print(f"wrote results/campaign.json and {path}")
+    elif args.command == "sensitivity":
+        report = run_budget_sensitivity(
+            generations=args.generations, population_size=args.population, seed=args.seed
+        )
+        correlations = report["correlations"]
+        print(
+            f"{args.generations} generations x {args.population} population, seed {args.seed}: "
+            f"de novo r = {correlations['de_novo']:+.3f}, pooled r = {correlations['pooled']:+.3f}"
+        )
+        print("wrote results/budget_sensitivity.json")
     elif args.command == "evaluate":
         _evaluate()
     elif args.command == "audit":

@@ -178,3 +178,21 @@ def test_no_document_claims_the_invariant_terms_are_exactly_half(campaign):
     root = CAMPAIGN.parents[1]
     for document in (root / "results" / "RESULTS.md", root / "README.md"):
         assert "0.500 by construction" not in document.read_text(encoding="utf-8")
+
+
+def test_the_reduced_budget_figures_come_from_a_committed_artifact():
+    """The two numbers that used to live only in prose.
+
+    `results/budget_sensitivity.json` is written by `cosmepep sensitivity`, and the README,
+    METHODS and `cosmepep audit` all have to quote it rather than a remembered value.
+    """
+    path = CAMPAIGN.parent / "budget_sensitivity.json"
+    if not path.exists():
+        pytest.skip(f"{path} missing; run `cosmepep sensitivity` first")
+    sensitivity = json.loads(path.read_text(encoding="utf-8"))
+    assert (sensitivity["generations"], sensitivity["population_size"]) == (6, 60)
+    root = CAMPAIGN.parents[1]
+    for key in ("de_novo", "pooled"):
+        quoted = f"{sensitivity['correlations'][key]:.3f}"
+        assert quoted in (root / "README.md").read_text(encoding="utf-8")
+        assert quoted in (root / "docs" / "METHODS.md").read_text(encoding="utf-8")

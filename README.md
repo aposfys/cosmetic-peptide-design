@@ -65,8 +65,11 @@ n = 5 rows are the ones with an honest denominator.
 
 Quote that number with its search budget. It predicts a *ceiling*, and a campaign reaches its
 ceiling only once the search converges: rerun the de novo track at 6 generations × 60
-population instead of 30 × 250 and the pooled figure falls to **0.740**, because an
-under-converged optimiser sits at a different distance below each programme's limit. The
+population instead of 30 × 250 and the de novo figure falls to **0.689** and the pooled one to
+**0.742**, because an under-converged optimiser sits at a different distance below each
+programme's limit. `cosmepep sensitivity` writes that rerun to
+[results/budget_sensitivity.json](results/budget_sensitivity.json), so the caveat has a file
+behind it. The
 load-bearing figure is the encrypted track's **r = 0.957** — a ranked enumeration with no
 stochastic search in it, which reproduces bit-for-bit from a fresh clone with a cold cache.
 `cosmepep audit` prints all four, and the assertion in `tests/` is pinned to the

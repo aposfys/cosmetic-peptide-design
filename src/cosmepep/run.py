@@ -20,7 +20,7 @@ from pathlib import Path
 from .chemistry import profile, smiles
 from .composition import matrix_enrichment
 from .controls import build_controls, composition_distance
-from .evaluate import Separation, separate
+from .evaluate import Separation, pearson, separate
 from .generate import Candidate, diverse_subset, evolve, levenshtein, plateau, seed_library
 from .liabilities import assess
 from .objectives import PROGRAMMES, Programme
@@ -296,3 +296,72 @@ def run_all(
     out.mkdir(parents=True, exist_ok=True)
     (out / "campaign.json").write_text(json.dumps(campaign, indent=2))
     return campaign
+
+
+#: The reduced budget the order-weight correlation is quoted against, written to
+#: ``results/budget_sensitivity.json`` so the figure has a source rather than sitting in prose.
+SENSITIVITY_BUDGET = (6, 60)
+
+
+def scrambled_auc(track: dict) -> float:
+    """The AUC against the scrambled control, out of one track's separation list."""
+    return next(
+        separation["auc"]
+        for separation in track["separations"]
+        if separation["control_kind"] == "scrambled"
+    )
+
+
+def run_budget_sensitivity(
+    *,
+    generations: int = SENSITIVITY_BUDGET[0],
+    population_size: int = SENSITIVITY_BUDGET[1],
+    seed: int = 0,
+    out: Path = RESULTS,
+) -> dict:
+    """The whole campaign again at a reduced search budget, kept for one number.
+
+    Order-sensitive weight predicts a *ceiling*, and a genetic algorithm reaches a ceiling
+    only once it has converged. Rerunning at a fraction of the documented budget separates
+    what the objective determines from what the run determines, and the difference is large
+    enough that quoting the correlation without its budget would be the same unreported
+    choice this repository is about. Only the correlations and the per-programme AUCs are
+    written out, not the shortlists, because nothing here is a design result.
+    """
+    rows = []
+    for programme in PROGRAMMES:
+        report = run_programme(
+            programme, generations=generations, population_size=population_size, seed=seed
+        )
+        rows.append(
+            {
+                "programme": report["programme"],
+                "order_sensitive_weight": report["order_sensitive_weight"],
+                "scrambled_auc": {
+                    track_name: round(scrambled_auc(track), 4)
+                    for track_name, track in report["tracks"].items()
+                },
+            }
+        )
+
+    de_novo = [
+        (row["order_sensitive_weight"], row["scrambled_auc"]["de_novo"]) for row in rows
+    ]
+    encrypted = [
+        (row["order_sensitive_weight"], row["scrambled_auc"]["encrypted"]) for row in rows
+    ]
+    sensitivity = {
+        "seed": seed,
+        "generations": generations,
+        "population_size": population_size,
+        "evaluation_pool": EVALUATION_POOL,
+        "programmes": rows,
+        "correlations": {
+            "de_novo": round(pearson(de_novo), 4),
+            "encrypted": round(pearson(encrypted), 4),
+            "pooled": round(pearson(encrypted + de_novo), 4),
+        },
+    }
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "budget_sensitivity.json").write_text(json.dumps(sensitivity, indent=2))
+    return sensitivity

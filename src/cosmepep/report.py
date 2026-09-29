@@ -167,3 +167,8 @@ def write(campaign: dict, out: Path = RESULTS) -> Path:
 
 def load(out: Path = RESULTS) -> dict:
     return json.loads((out / "campaign.json").read_text())
+
+
+def load_sensitivity(out: Path = RESULTS) -> dict:
+    """The reduced-budget rerun, so the budget caveat is read off a file and not from prose."""
+    return json.loads((out / "budget_sensitivity.json").read_text())

@@ -64,6 +64,23 @@ def roc_auc(positive: Sequence[float], negative: Sequence[float]) -> float:
     )
 
 
+def pearson(pairs: Sequence[tuple[float, float]]) -> float:
+    """Pearson r over (x, y) pairs, with no p-value attached.
+
+    Deliberately returns the coefficient alone. The pairs this repository correlates are
+    five or ten programme cells whose x is a property of the objective rather than of an
+    independent draw, so a p-value computed from the row count would be reported over a
+    denominator that does not exist. See ``docs/METHODS.md`` section 5.
+    """
+    mean_x = sum(x for x, _ in pairs) / len(pairs)
+    mean_y = sum(y for _, y in pairs) / len(pairs)
+    covariance = sum((x - mean_x) * (y - mean_y) for x, y in pairs)
+    spread = (
+        sum((x - mean_x) ** 2 for x, _ in pairs) * sum((y - mean_y) ** 2 for _, y in pairs)
+    ) ** 0.5
+    return covariance / spread if spread else 0.0
+
+
 def bootstrap_auc(
     positive: Sequence[float],
     negative: Sequence[float],

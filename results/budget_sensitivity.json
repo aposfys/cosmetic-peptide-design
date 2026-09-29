@@ -1,0 +1,53 @@
+{
+  "seed": 0,
+  "generations": 6,
+  "population_size": 60,
+  "evaluation_pool": 120,
+  "programmes": [
+    {
+      "programme": "matrix_signal",
+      "order_sensitive_weight": 0.4225,
+      "scrambled_auc": {
+        "encrypted": 0.8068,
+        "de_novo": 0.7808
+      }
+    },
+    {
+      "programme": "cu_carrier",
+      "order_sensitive_weight": 0.5526,
+      "scrambled_auc": {
+        "encrypted": 0.9055,
+        "de_novo": 0.6755
+      }
+    },
+    {
+      "programme": "snare_competitor",
+      "order_sensitive_weight": 0.6026,
+      "scrambled_auc": {
+        "encrypted": 0.9391,
+        "de_novo": 0.7945
+      }
+    },
+    {
+      "programme": "tyrosinase_modulator",
+      "order_sensitive_weight": 0.3143,
+      "scrambled_auc": {
+        "encrypted": 0.5608,
+        "de_novo": 0.5065
+      }
+    },
+    {
+      "programme": "barrier_amp",
+      "order_sensitive_weight": 0.473,
+      "scrambled_auc": {
+        "encrypted": 0.7842,
+        "de_novo": 0.6241
+      }
+    }
+  ],
+  "correlations": {
+    "de_novo": 0.6891,
+    "encrypted": 0.9573,
+    "pooled": 0.7415
+  }
+}
