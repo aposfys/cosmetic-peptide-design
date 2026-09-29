@@ -53,7 +53,8 @@ composition, net charge, hydrophilicity, permeation — are functions of composi
 They return the same value for a sequence and its anagram, so they cannot contribute to
 separation from a scrambled control **even in principle**. The fraction of objective weight
 carried by the order-sensitive terms is therefore a prediction, made before any control is
-run, about how much separation can survive.
+run, about how much separation can survive. [METHODS](docs/METHODS.md) section 5 measures that
+invariance instead of assuming it, and records the one place it is only approximate.
 
 It is a good prediction. Per programme, order-sensitive weight against scrambled AUC gives
 **r = 0.957** on the encrypted track (p = 0.011) and **0.977** on the de novo track (p = 0.004);
